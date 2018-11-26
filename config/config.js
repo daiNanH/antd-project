@@ -1,3 +1,4 @@
+import router from './routers';
 export default {
     plugins : [
         [
@@ -6,50 +7,19 @@ export default {
                 dva: true,
                 locale: {
                     enable: true
-                }
+                },
+                title:"看看就走",
+                
             }
         ]
     ],
-    routes : [
-        {
-            path: '/',
-            component: '../layout',
-            routes: [
-                {
-                    path: '/',
-                    component: './HelloWorld'
-                }, {
-                    path: '/helloWorld',
-                    component: './HelloWorld'
-                }, {
-                    path: 'puzzlecards',
-                    component: './puzzlecards'
-                }, {
-                    path: 'list',
-                    component: '../page/List/index'
-                }, {
-                    path: '/dashboard',
-                    routes: [
-
-                        {
-                            path: '/dashboard/analysis',
-                            routes: [{path : '/dashboard/analysis/pp', component : 'Dashboard/Pp'}]
-                        }, {
-                            path: '/dashboard/monitor',
-                            component: 'Dashboard/Monitor'
-                        }, {
-                            path: '/dashboard/workplace',
-                            component: 'Dashboard/Workplace'
-                        }
-                    ]
-                }
-            ]
-
-        }
-    ],
+    theme:{
+        "@font-color":"red"
+    },
+    routes :router,
     proxy : {
         '/dev': {
-            target: 'https://08ad1pao69.execute-api.us-east-1.amazonaws.com',
+            target: 'https://gitee.com/imooccode/',
             changeOrigin: true
         }
     }

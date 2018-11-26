@@ -14,7 +14,7 @@ const random_jokes = [
 let random_joke_call_count = 0;
 
 export default {
-    'get /dev/random_joke' : function (req, res) {
+    '/dev/random_joke' : function (req, res) {
         const responseObj = random_jokes[random_joke_call_count % random_jokes.length];
         random_joke_call_count += 1;
         setTimeout(() => {

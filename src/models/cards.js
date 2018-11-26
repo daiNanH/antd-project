@@ -1,4 +1,4 @@
-import request from '../util/request';
+import request from '../utils/request';
 const delay = (millisecond) => {
   return new Promise((resolve) => {
     setTimeout(resolve, millisecond);
