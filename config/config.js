@@ -5,9 +5,6 @@ export default {
             'umi-plugin-react', {
                 antd: true,
                 dva: true,
-                locale: {
-                    enable: true
-                },
                 title:"看看就走",
                 
             }
@@ -18,8 +15,8 @@ export default {
     },
     routes :router,
     proxy : {
-        '/dev': {
-            target: 'https://gitee.com/imooccode/',
+        '/manage': {
+            target: 'http://admintest.happymmall.com',
             changeOrigin: true
         }
     }

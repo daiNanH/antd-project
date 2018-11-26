@@ -1,133 +1,116 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import Link from 'umi/link';
-import { Checkbox, Alert, Icon } from 'antd';
-import Login from '@/components/Login';
-import styles from './Login.less';
+import {Form, Icon, Input, Button, Checkbox,message } from 'antd';
+import axios from 'axios'
+import request from '@/utils/request';
+import router from 'umi/router';
+import loginCss from './Login.css';
+const FormItem = Form.Item;
+class NormalLoginForm extends React.Component {
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values);
+        }
+        if(values.password&&values.userName){
+          var formData = new FormData();
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
+            formData.append('username', values.userName);
+            formData.append('password', values.password);
 
-@connect(({ login, loading }) => ({
-  login,
-  submitting: loading.effects['login/login'],
-}))
-class LoginPage extends Component {
-  state = {
-    type: 'account',
-    autoLogin: true,
-  };
-
-  onTabChange = type => {
-    this.setState({ type });
-  };
-
-  onGetCaptcha = () =>
-    new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
-        if (err) {
-          reject(err);
-        } else {
-          const { dispatch } = this.props;
-          dispatch({
-            type: 'login/getCaptcha',
-            payload: values.mobile,
+            // fetch('/manage/user/login.do', {
+            //   method: 'POST',
+            //   body: formData
+            // })
+            // .then(response => response.json())
+            // .catch(error => console.error('Error:', error))
+            // .then( response => console.log('Success:', JSON.stringify(response)));
+          // var Form=new FormData(JSON.stringify({
+          //   "username":values.userName,
+          //   "password":values.password
+          // }))
+          // axios.post('/manage/user/login.do', {
+          //   "username":values.userName,
+          //   "password":values.password
+          // })
+          // .then(function (response) {
+          //   if(response.data.status==0){
+          //         router.push('/index');
+          //       }else{
+          //         message.error(response.data.msg);
+          //       }
+          // })
+          // .catch(function (error) {
+          //   message.error(error.msg);
+          // });
+          // console.log(Form)
+          request("/manage/user/login.do",{
+            method: 'POST',
+            body:formData,
+           
+          }).then(function(data){
+            if(data.status==0){
+              router.push('/index');
+            }else{
+              message.error(data.msg);
+            }
+          }).catch(function(obj){
+            console.log("内容错误！！！")
           })
-            .then(resolve)
-            .catch(reject);
         }
       });
-    });
-
-  handleSubmit = (err, values) => {
-    const { type } = this.state;
-    if (!err) {
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'login/login',
-        payload: {
-          ...values,
-          type,
-        },
-      });
-    }
-  };
-
-  changeAutoLogin = e => {
-    this.setState({
-      autoLogin: e.target.checked,
-    });
-  };
-
-  renderMessage = content => (
-    <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
-  );
+  }
 
   render() {
-    const { login, submitting } = this.props;
-    const { type, autoLogin } = this.state;
+    const {getFieldDecorator} = this.props.form;
     return (
-      <div className={styles.main}>
-        <Login
-          defaultActiveKey={type}
-          onTabChange={this.onTabChange}
-          onSubmit={this.handleSubmit}
-          ref={form => {
-            this.loginForm = form;
-          }}
-        >
-          <Tab key="account" tab={formatMessage({ id: 'app.login.tab-login-credentials' })}>
-            {login.status === 'error' &&
-              login.type === 'account' &&
-              !submitting &&
-              this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
-            <UserName name="userName" placeholder="username: admin or user" />
-            <Password
-              name="password"
-              placeholder="password: ant.design"
-              onPressEnter={() => this.loginForm.validateFields(this.handleSubmit)}
-            />
-          </Tab>
-          <Tab key="mobile" tab={formatMessage({ id: 'app.login.tab-login-mobile' })}>
-            {login.status === 'error' &&
-              login.type === 'mobile' &&
-              !submitting &&
-              this.renderMessage(
-                formatMessage({ id: 'app.login.message-invalid-verification-code' })
-              )}
-            <Mobile name="mobile" />
-            <Captcha
-              name="captcha"
-              countDown={120}
-              onGetCaptcha={this.onGetCaptcha}
-              getCaptchaButtonText={formatMessage({ id: 'form.captcha' })}
-              getCaptchaSecondText={formatMessage({ id: 'form.captcha.second' })}
-            />
-          </Tab>
-          <div>
-            <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
-              <FormattedMessage id="app.login.remember-me" />
-            </Checkbox>
-            <a style={{ float: 'right' }} href="">
-              <FormattedMessage id="app.login.forgot-password" />
-            </a>
-          </div>
-          <Submit loading={submitting}>
-            <FormattedMessage id="app.login.login" />
-          </Submit>
-          <div className={styles.other}>
-            <FormattedMessage id="app.login.sign-in-with" />
-            <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
-            <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
-            <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
-            <Link className={styles.register} to="/user/register">
-              <FormattedMessage id="app.login.signup" />
-            </Link>
-          </div>
-        </Login>
+      <div id={loginCss['components-form-demo-normal-login']}>
+        <Form onSubmit={this.handleSubmit} className={loginCss['login-form']}>
+          <FormItem>
+            {getFieldDecorator('userName', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入用户名!'
+                }
+              ]
+            })(
+              <Input
+                prefix={< Icon type = "user" style = {{ color: 'rgba(0,0,0,.25)' }}/>}
+                placeholder="用户名"/>
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('password', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入密码!'
+                }
+              ]
+            })(
+              <Input
+                prefix={< Icon type = "lock" style = {{ color: 'rgba(0,0,0,.25)' }}/>}
+                type="password"
+                placeholder="密码"/>
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('remember', {
+              valuePropName: 'checked',
+              initialValue: true
+            })(
+              <Checkbox>记住密码</Checkbox>
+            )}
+            <a className={loginCss['login-form-forgot']} href="">忘记密码</a>
+            <Button type="primary" htmlType="submit" className={loginCss['login-form-button']} >
+              Log in
+            </Button>
+          </FormItem>
+        </Form>
       </div>
     );
   }
 }
 
-export default LoginPage;
+const WrappedNormalLoginForm = Form.create()(NormalLoginForm)
+export default WrappedNormalLoginForm;

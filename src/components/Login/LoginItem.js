@@ -133,8 +133,8 @@ Object.keys(ItemMap).forEach(key => {
           rules={item.rules}
           {...props}
           type={key}
-          updateActive={context.updateActive}
-          form={context.form}
+          // updateActive={context.updateActive}
+          // form={context.form}
         />
   );
 });
