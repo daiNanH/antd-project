@@ -1,5 +1,5 @@
 import {Form, Icon, Input, Button, Checkbox,message } from 'antd';
-import axios from 'axios'
+// import axios from 'axios'
 import request from '@/utils/request';
 import router from 'umi/router';
 import loginCss from './Login.css';
