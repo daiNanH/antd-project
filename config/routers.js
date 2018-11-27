@@ -4,8 +4,19 @@ const router=[
         component: 'Login'
     },
     {
+        path: '/login',
+        component: 'Login'
+    },
+    {
         path: '/index',
-        component: '../layout'
-      }
+        component: '../layout',
+        routes:[
+            {
+                path: '/index',
+                component: '/home/home'
+              }
+        ]
+      },
+      
 ]
 export default router;

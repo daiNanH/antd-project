@@ -3,8 +3,8 @@ import {Layout, Menu,Icon,Avatar,Dropdown, message,Spin} from 'antd';
 import Link from 'umi/link';
 import router from 'umi/router';
 import axios from 'axios';
-// import  './config'
-import { requsetLoading, responseLoading} from './Loading';
+import  './config'
+// import { requsetLoading, responseLoading} from './Loading';
 // Header, Footer, Sider, Content组件在Layout组件模块下
 const {Header, Footer, Sider, Content} = Layout;
 const SubMenu = Menu.SubMenu;
@@ -20,7 +20,7 @@ const onClick = function ({key}) {
       axios.post('/user/logout.do')
       .then(function (response) {
         if(response.data.status==0){
-          router.push('/');
+          router.push('/login');
             }else{
               message.error(response.data.msg);
             }
@@ -48,8 +48,8 @@ class BasicLayout extends Component {
     }
   }
   componentWillMount(){
-    console.log(requsetLoading)
-    console.log(responseLoading)
+    // console.log(requsetLoading)
+    // console.log(responseLoading)
     var _this=this
     axios.post('/user/get_information.do')
     .then(function (response) {
@@ -58,7 +58,7 @@ class BasicLayout extends Component {
               username:response.data.data.username
             })
           }else{
-            router.push('/');
+            router.push('/login');
           }
     })
     .catch(function (error) {
@@ -66,6 +66,7 @@ class BasicLayout extends Component {
     });
   }
   render() {
+    console.log(this.props)
     return (
       <Layout>
         <Sider
@@ -81,7 +82,7 @@ class BasicLayout extends Component {
       }}/>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
-              <Link to="/home">
+              <Link to="/index">
                 <Icon type="pie-chart"/>
                 <span>首页</span>
               </Link>
@@ -130,7 +131,7 @@ class BasicLayout extends Component {
               backgroundColor: '#fff',
               minHeight: 360,
               textAlign:"center"
-            }}><Spin />{this.props.children}</div>
+            }}><Spin spinning={this.props.children?false:true}  />{this.props.children}</div>
             
           </Content>
         </Layout>
