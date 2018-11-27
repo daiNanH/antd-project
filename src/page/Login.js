@@ -1,5 +1,5 @@
 import {Form, Icon, Input, Button, Checkbox,message } from 'antd';
-// import axios from 'axios'
+import axios from 'axios'
 import request from '@/utils/request';
 import router from 'umi/router';
 import loginCss from './Login.css';
@@ -28,34 +28,33 @@ class NormalLoginForm extends React.Component {
           //   "username":values.userName,
           //   "password":values.password
           // }))
-          // axios.post('/manage/user/login.do', {
-          //   "username":values.userName,
-          //   "password":values.password
-          // })
-          // .then(function (response) {
-          //   if(response.data.status==0){
-          //         router.push('/index');
-          //       }else{
-          //         message.error(response.data.msg);
-          //       }
-          // })
-          // .catch(function (error) {
-          //   message.error(error.msg);
-          // });
-          // console.log(Form)
-          request("/manage/user/login.do",{
-            method: 'POST',
-            body:formData,
-           
-          }).then(function(data){
-            if(data.status==0){
-              router.push('/index');
-            }else{
-              message.error(data.msg);
-            }
-          }).catch(function(obj){
-            console.log("内容错误！！！")
+          axios.post('/manage/user/login.do', formData)
+          .then(function (response) {
+            if(response.data.status==0){
+                  router.push('/index');
+                }else{
+                  message.error(response.data.msg);
+                }
           })
+          .catch(function (error) {
+            message.error(error.msg);
+          });
+          // console.log(Form)
+
+
+          // request("/manage/user/login.do",{
+          //   method: 'POST',
+          //   body:formData,
+           
+          // }).then(function(data){
+          //   if(data.status==0){
+          //     router.push('/index');
+          //   }else{
+          //     message.error(data.msg);
+          //   }
+          // }).catch(function(obj){
+          //   console.log("内容错误！！！")
+          // })
         }
       });
   }
