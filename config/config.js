@@ -6,13 +6,16 @@ export default {
                 antd: true,
                 dva: true,
                 title:"看看就走",
-                
+                dynamicImport: {
+                    loadingComponent: './components/PageLoading/index',
+                },
             }
         ]
     ],
     theme:{
         "@font-color":"red"
     },
+    
     routes :router,
     proxy : {
         '/manage': {

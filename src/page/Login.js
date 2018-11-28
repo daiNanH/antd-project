@@ -1,15 +1,27 @@
 import {Form, Icon, Input, Button, Checkbox,message } from 'antd';
-import axios from 'axios'
+// import axios from 'axios'
 import request from '@/utils/request';
 import router from 'umi/router';
 import loginCss from './Login.css';
 const FormItem = Form.Item;
 class NormalLoginForm extends React.Component {
+  state = {
+    loading: false,
+  }
   handleSubmit = (e) => {
     e.preventDefault();
+    var _this=this
+    this.setState({
+      loading: true,
+    })
     this.props.form.validateFields((err, values) => {
         if (!err) {
+         
           console.log('Received values of form: ', values);
+        }else{
+          _this.setState({
+            loading: false,
+          })
         }
         if(values.password&&values.userName){
           var formData = new FormData();
@@ -28,33 +40,40 @@ class NormalLoginForm extends React.Component {
           //   "username":values.userName,
           //   "password":values.password
           // }))
-          axios.post('/manage/user/login.do', formData)
-          .then(function (response) {
-            if(response.data.status==0){
-                  router.push('/index');
-                }else{
-                  message.error(response.data.msg);
-                }
-          })
-          .catch(function (error) {
-            message.error(error.msg);
-          });
-          // console.log(Form)
-
-
-          // request("/manage/user/login.do",{
-          //   method: 'POST',
-          //   body:formData,
-           
-          // }).then(function(data){
-          //   if(data.status==0){
-          //     router.push('/index');
-          //   }else{
-          //     message.error(data.msg);
-          //   }
-          // }).catch(function(obj){
-          //   console.log("内容错误！！！")
+          // axios.post('/manage/user/login.do', {
+          //   "username":values.userName,
+          //   "password":values.password
           // })
+          // .then(function (response) {
+          //   if(response.data.status==0){
+          //         router.push('/index');
+          //       }else{
+          //         message.error(response.data.msg);
+          //       }
+          // })
+          // .catch(function (error) {
+          //   message.error(error.msg);
+          // });
+          // console.log(Form)
+          request("/manage/user/login.do",{
+            method: 'POST',
+            body:formData,
+           
+          }).then(function(data){
+            _this.setState({
+              loading: false,
+            })
+            if(data.status==0){
+              router.push('/index');
+            }else{
+              message.error(data.msg);
+            }
+          }).catch(function(obj){
+            _this.setState({
+              loading: false,
+            })
+            console.log("内容错误！！！")
+          })
         }
       });
   }
@@ -101,7 +120,7 @@ class NormalLoginForm extends React.Component {
               <Checkbox>记住密码</Checkbox>
             )}
             <a className={loginCss['login-form-forgot']} href="">忘记密码</a>
-            <Button type="primary" htmlType="submit" className={loginCss['login-form-button']} >
+            <Button type="primary" htmlType="submit" className={loginCss['login-form-button']} loading={this.state.loading} >
               Log in
             </Button>
           </FormItem>
