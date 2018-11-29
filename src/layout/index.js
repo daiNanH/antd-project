@@ -131,7 +131,7 @@ class BasicLayout extends Component {
               backgroundColor: '#fff',
               minHeight: 360,
               textAlign:"center"
-            }}><Spin spinning={this.props.children?false:true}  />{this.props.children}</div>
+            }}>{this.props.children}</div>
             
           </Content>
         </Layout>
