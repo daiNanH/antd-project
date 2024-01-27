@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider && umi dev",
-    "build": "export NODE_OPTIONS=--openssl-legacy-provider && umi build"
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider && umi build"
   },
   "author": "",
   "license": "ISC",
