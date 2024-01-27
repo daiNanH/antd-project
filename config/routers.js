@@ -13,7 +13,7 @@ const router=[
         routes:[
             {
                 path: '/index',
-                component: '/home/home'
+                component: './home/Home'
               }
         ]
       },
